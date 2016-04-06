@@ -1,3 +1,6 @@
 Paraglider/Saved/
 HOPA/Library/
 Paraglider/Intermediate/
+*.sdf
+*.opendb
+HOPA/obj/
