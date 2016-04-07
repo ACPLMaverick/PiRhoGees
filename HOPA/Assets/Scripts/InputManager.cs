@@ -6,9 +6,9 @@ public class InputManager : Singleton<InputManager>
 
     #region public
 
-    public delegate void InputClickUpEvent(Vector2 screenPos);
-    public delegate void InputClickDownEvent(Vector2 screenPos);
-    public delegate void InputHoldEvent(Vector2 screenPos);
+    public delegate void InputClickUpEvent(Vector2 screenPos, Collider hitCollider);
+    public delegate void InputClickDownEvent(Vector2 screenPos, Collider hitCollider);
+    public delegate void InputHoldEvent(Vector2 screenPos, Collider hitCollider);
     public delegate void InputZoomEvent(float amount);
     public delegate void InputMoveEvent(Vector2 currentScreenPos, Vector2 direction);
 
@@ -43,32 +43,35 @@ public class InputManager : Singleton<InputManager>
             Touch cTouch1 = Input.GetTouch(0);
             Touch cTouch2 = Input.GetTouch(1);
 
-            // ClickUp
-            if (cTouch1.phase == TouchPhase.Ended && OnInputClickUp != null)
+            if(Input.touchCount == 1)
             {
-               OnInputClickUp(cTouch1.position);
-            }
+                // ClickUp
+                if (cTouch1.phase == TouchPhase.Ended && OnInputClickUp != null)
+                {
+                    OnInputClickUp(cTouch1.position, GetColliderUnderCursor());
+                }
 
-            // ClickDown
-            if (cTouch1.phase == TouchPhase.Began && OnInputClickDown != null)
-            {
-                OnInputClickDown(cTouch1.position);
-            }
+                // ClickDown
+                if (cTouch1.phase == TouchPhase.Began && OnInputClickDown != null)
+                {
+                    OnInputClickDown(cTouch1.position, GetColliderUnderCursor());
+                }
 
-            // hold
-            if (cTouch1.phase == TouchPhase.Stationary && OnInputHold != null)
-            {
-                OnInputHold(cTouch1.position);
-            }
+                // hold
+                if (cTouch1.phase == TouchPhase.Stationary && OnInputHold != null)
+                {
+                    OnInputHold(cTouch1.position, GetColliderUnderCursor());
+                }
 
-            // move
-            if (cTouch1.phase == TouchPhase.Moved && OnInputMove != null)
-            {
-                OnInputMove(cTouch1.position, cTouch1.position - _cursorPrevPosition);
+                // move
+                if (cTouch1.phase == TouchPhase.Moved && OnInputMove != null)
+                {
+                    OnInputMove(cTouch1.position, cTouch1.position - _cursorPrevPosition);
+                }
             }
 
             // zoom
-            if (cTouch1.phase == TouchPhase.Moved && cTouch2.phase == TouchPhase.Moved && OnInputZoom != null)
+            if (cTouch1.phase == TouchPhase.Moved && cTouch2.phase == TouchPhase.Moved && OnInputZoom != null && Input.touchCount == 2)
             {
                 // pinch gesture
                 // Two touch positions with given directions are in fact two rays. Checking if the rays intersect (zoom in) or not (zoom out)
@@ -102,19 +105,19 @@ public class InputManager : Singleton<InputManager>
             // ClickUp
             if(Input.GetMouseButtonUp(0) && OnInputClickUp != null)
             {
-                OnInputClickUp(Input.mousePosition);
+                OnInputClickUp(Input.mousePosition, GetColliderUnderCursor());
             }
 
             // ClickDown
             if (Input.GetMouseButtonDown(0) && OnInputClickDown != null)
             {
-                OnInputClickDown(Input.mousePosition);
+                OnInputClickDown(Input.mousePosition, GetColliderUnderCursor());
             }
 
             // hold
             if (Input.GetMouseButton(0) && OnInputHold != null)
             {
-                OnInputHold(Input.mousePosition);
+                OnInputHold(Input.mousePosition, GetColliderUnderCursor());
             }
 
             // move
@@ -131,6 +134,24 @@ public class InputManager : Singleton<InputManager>
 
             _cursorPrevPosition = Input.mousePosition;
         }
+    }
+
+    private Collider GetColliderUnderCursor()
+    {
+        Vector3 clickPos;
+        if (Application.isMobilePlatform)
+        {
+            clickPos = Input.GetTouch(0).position;
+        }
+        else
+        {
+            clickPos = Input.mousePosition;
+        }
+        clickPos = Camera.main.ScreenToWorldPoint(clickPos);
+        RaycastHit hit;
+        Physics.Raycast(new Ray(clickPos, new Vector3(0.0f, 0.0f, 1.0f)), out hit);
+
+        return hit.collider;
     }
 
     #endregion

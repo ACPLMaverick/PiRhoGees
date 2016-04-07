@@ -5,17 +5,16 @@ public class CameraManager : Singleton<CameraManager>
 {
     #region constants
 
-    private const float CAMERA_ZOOM_MIN = 0.1f;
-    private const float CAMERA_ZOOM_MAX = 10.0f;
-
     #endregion
 
     #region public
 
-    public Camera CameraControlled;
-    public float CameraMovementRate;
-    public float CameraZoomRate;
-    public GameObject Background0;
+    public Camera CameraControlled = null;
+    public GameObject Background0 = null;
+    public float CameraMovementRate = 1.0f;
+    public float CameraZoomRate = 0.1f;
+    public float CameraZoomMin = 0.1f;
+    public float CameraZoomMax = 3.0f;
 
     #endregion
 
@@ -91,7 +90,7 @@ public class CameraManager : Singleton<CameraManager>
     private void ZoomCamera(float amount)
     {
         float oldSize = CameraControlled.orthographicSize;
-        CameraControlled.orthographicSize = Mathf.Clamp(CameraControlled.orthographicSize + amount * CameraZoomRate, CAMERA_ZOOM_MIN, CAMERA_ZOOM_MAX);
+        CameraControlled.orthographicSize = Mathf.Clamp(CameraControlled.orthographicSize + amount * CameraZoomRate, CameraZoomMin, CameraZoomMax);
 
         FixCameraZoomBoundaries();
     }
@@ -114,8 +113,8 @@ public class CameraManager : Singleton<CameraManager>
 
     private void FixCameraZoomBoundaries()
     {
-        uint trials = 100;
-        float step = 0.01f;
+        uint trials = 1000;
+        float step = 0.001f;
         for(uint i = 0; i < trials; ++i)
         {
             // get point min and max for the camera view rectangle
