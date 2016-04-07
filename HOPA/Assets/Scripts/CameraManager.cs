@@ -10,7 +10,7 @@ public class CameraManager : Singleton<CameraManager>
     #region public
 
     public Camera CameraControlled = null;
-    public GameObject Background0 = null;
+    public Room CurrentRoom = null;
     public float CameraMovementRate = 1.0f;
     public float CameraZoomRate = 0.1f;
     public float CameraZoomMin = 0.1f;
@@ -32,13 +32,13 @@ public class CameraManager : Singleton<CameraManager>
     {
         // acquire background min and max points
 
-        SpriteRenderer sr = Background0.GetComponent<SpriteRenderer>();
+        SpriteRenderer sr = CurrentRoom.GetComponent<SpriteRenderer>();
         _bMin.x = sr.sprite.bounds.center.x - sr.sprite.bounds.extents.x;
         _bMin.y = sr.sprite.bounds.center.y - sr.sprite.bounds.extents.y;
         _bMax.x = sr.sprite.bounds.center.x + sr.sprite.bounds.extents.x;
         _bMax.y = sr.sprite.bounds.center.y + sr.sprite.bounds.extents.y;
 
-        Transform tr = Background0.GetComponent<Transform>();
+        Transform tr = CurrentRoom.GetComponent<Transform>();
         Vector4 min4 = new Vector4(_bMin.x, _bMin.y, 0.0f, 1.0f);
         Vector4 max4 = new Vector4(_bMax.x, _bMax.y, 0.0f, 1.0f);
         min4 = tr.localToWorldMatrix * min4;
@@ -46,9 +46,6 @@ public class CameraManager : Singleton<CameraManager>
 
         _bMin = new Vector2(min4.x, min4.y);
         _bMax = new Vector2(max4.x, max4.y);
-
-        Debug.Log(_bMin);
-        Debug.Log(_bMax);
 
         // register for events
 
@@ -77,7 +74,7 @@ public class CameraManager : Singleton<CameraManager>
         Physics.Raycast(new Ray(wp1, new Vector3(0.0f, 0.0f, 1.0f)), out hit);
         
         // we hit other object or nothing - return
-        if(hit.collider == null || hit.collider.gameObject != Background0)
+        if(hit.collider == null || hit.collider.gameObject != CurrentRoom.gameObject)
         {
             return;
         }
@@ -89,7 +86,6 @@ public class CameraManager : Singleton<CameraManager>
 
     private void ZoomCamera(float amount)
     {
-        float oldSize = CameraControlled.orthographicSize;
         CameraControlled.orthographicSize = Mathf.Clamp(CameraControlled.orthographicSize + amount * CameraZoomRate, CameraZoomMin, CameraZoomMax);
 
         FixCameraZoomBoundaries();
@@ -98,7 +94,7 @@ public class CameraManager : Singleton<CameraManager>
     private void FixCameraPositionBoundaries()
     {
         // get point min and max for the camera view rectangle
-        Vector3 cMinWorld = CameraControlled.ScreenToWorldPoint(new Vector3(0.0f, 0.0f, 0.0f));
+        Vector3 cMinWorld = CameraControlled.ScreenToWorldPoint(Vector3.zero);
         Vector3 cMaxWorld = CameraControlled.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
         cMinWorld.z = 0.0f;
         cMaxWorld.z = 0.0f;
@@ -118,7 +114,7 @@ public class CameraManager : Singleton<CameraManager>
         for(uint i = 0; i < trials; ++i)
         {
             // get point min and max for the camera view rectangle
-            Vector3 cMinWorld = CameraControlled.ScreenToWorldPoint(new Vector3(0.0f, 0.0f, 0.0f));
+            Vector3 cMinWorld = CameraControlled.ScreenToWorldPoint(Vector3.zero);
             Vector3 cMaxWorld = CameraControlled.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));
             cMinWorld.z = 0.0f;
             cMaxWorld.z = 0.0f;
