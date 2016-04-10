@@ -10,19 +10,22 @@ public class InputManager : Singleton<InputManager>
     public delegate void InputClickDownEvent(Vector2 screenPos, Collider hitCollider);
     public delegate void InputHoldEvent(Vector2 screenPos, Collider hitCollider);
     public delegate void InputZoomEvent(float amount);
-    public delegate void InputMoveEvent(Vector2 currentScreenPos, Vector2 direction);
+    public delegate void InputMoveEvent(Vector2 currentScreenPos, Vector2 direction, Collider hitCollider);
 
     public static event InputClickUpEvent OnInputClickUp;
     public static event InputClickDownEvent OnInputClickDown;
     public static event InputHoldEvent OnInputHold;
     public static event InputZoomEvent OnInputZoom;
     public static event InputMoveEvent OnInputMove;
+    public static event InputMoveEvent OnInputMoveExclusive;
 
     #endregion
 
     #region private
 
     private Vector2 _cursorPrevPosition;
+    private bool _canInvokeMoveExclusive = false;
+    private Collider _invokeMoveExclusiveColliderHelper = null;
 
     #endregion
 
@@ -49,6 +52,12 @@ public class InputManager : Singleton<InputManager>
                 if (cTouch1.phase == TouchPhase.Ended && OnInputClickUp != null)
                 {
                     OnInputClickUp(cTouch1.position, GetColliderUnderCursor());
+
+                    if(_canInvokeMoveExclusive)
+                    {
+                        _canInvokeMoveExclusive = false;
+                        _invokeMoveExclusiveColliderHelper = null;
+                    }
                 }
 
                 // ClickDown
@@ -64,9 +73,20 @@ public class InputManager : Singleton<InputManager>
                 }
 
                 // move
-                if (cTouch1.phase == TouchPhase.Moved && OnInputMove != null)
+                if (cTouch1.phase == TouchPhase.Moved)
                 {
-                    OnInputMove(cTouch1.position, cTouch1.position - _cursorPrevPosition);
+                    Collider uc = GetColliderUnderCursor();
+                    if(OnInputMove != null) OnInputMove(cTouch1.position, cTouch1.position - _cursorPrevPosition, uc);
+
+                    if(!_canInvokeMoveExclusive)
+                    {
+                        _canInvokeMoveExclusive = true;
+                        _invokeMoveExclusiveColliderHelper = uc;
+                    }
+                    else
+                    {
+                        if(OnInputMoveExclusive != null) OnInputMoveExclusive(cTouch1.position, cTouch1.position - _cursorPrevPosition, _invokeMoveExclusiveColliderHelper);
+                    }
                 }
             }
 
@@ -121,13 +141,34 @@ public class InputManager : Singleton<InputManager>
             }
 
             // move
-            if(Input.GetMouseButton(1) && _cursorPrevPosition != new Vector2(Input.mousePosition.x, Input.mousePosition.y) && OnInputMove != null)
+            if(Input.GetMouseButton(1) && _cursorPrevPosition != new Vector2(Input.mousePosition.x, Input.mousePosition.y))
             {
-                OnInputMove(Input.mousePosition, new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _cursorPrevPosition);
+                Collider uc = GetColliderUnderCursor();
+                if(OnInputMove != null) OnInputMove(Input.mousePosition, new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _cursorPrevPosition, uc);
+
+                if (!_canInvokeMoveExclusive)
+                {
+                    _canInvokeMoveExclusive = true;
+                    _invokeMoveExclusiveColliderHelper = uc;
+                }
+                else
+                {
+                    if (OnInputMoveExclusive != null) OnInputMoveExclusive(Input.mousePosition, new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _cursorPrevPosition, _invokeMoveExclusiveColliderHelper);
+                }
+            }
+
+            // move exclusive cleanup
+            if(Input.GetMouseButtonUp(1))
+            {
+                if (_canInvokeMoveExclusive)
+                {
+                    _canInvokeMoveExclusive = false;
+                    _invokeMoveExclusiveColliderHelper = null;
+                }
             }
 
             // zoom
-            if(Input.mouseScrollDelta.y != 0.0f && OnInputZoom != null)
+            if (Input.mouseScrollDelta.y != 0.0f && OnInputZoom != null)
             {
                 OnInputZoom(-Input.mouseScrollDelta.y);
             }

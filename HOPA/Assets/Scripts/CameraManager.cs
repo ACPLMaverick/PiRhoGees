@@ -49,7 +49,7 @@ public class CameraManager : Singleton<CameraManager>
 
         // register for events
 
-        InputManager.OnInputMove += MoveCamera;
+        InputManager.OnInputMoveExclusive += MoveCamera;
         InputManager.OnInputZoom += ZoomCamera;
     }
 	
@@ -59,25 +59,21 @@ public class CameraManager : Singleton<CameraManager>
         
 	}
 
-    private void MoveCamera(Vector2 origin, Vector2 direction)
+    private void MoveCamera(Vector2 origin, Vector2 direction, Collider hitCollider)
     {
         //Debug.Log(origin);
         //Debug.Log(direction);
 
         // check if we point the background or other object
-        RaycastHit hit;
+        // we hit other object or nothing - return
+        if (hitCollider == null || hitCollider.gameObject != CurrentRoom.gameObject)
+        {
+            return;
+        }
 
         Vector3 wp1 = CameraControlled.ScreenToWorldPoint(origin);
         Vector3 wp2 = CameraControlled.ScreenToWorldPoint(origin + direction);
         Vector3 deltaP = wp2 - wp1;
-
-        Physics.Raycast(new Ray(wp1, new Vector3(0.0f, 0.0f, 1.0f)), out hit);
-        
-        // we hit other object or nothing - return
-        if(hit.collider == null || hit.collider.gameObject != CurrentRoom.gameObject)
-        {
-            return;
-        }
 
         CameraControlled.transform.position += - deltaP * CameraMovementRate;
 
@@ -101,8 +97,8 @@ public class CameraManager : Singleton<CameraManager>
         Vector3 bMin3 = new Vector3(_bMin.x, _bMin.y, 0.0f);
         Vector3 bMax3 = new Vector3(_bMax.x, _bMax.y, 0.0f);
 
-        cMinWorld = bMin3 - Vector3.Min(cMinWorld, new Vector3(_bMin.x, _bMin.y, 0.0f));
-        cMaxWorld = -(Vector3.Max(cMaxWorld, new Vector3(_bMax.x, _bMax.y, 0.0f)) - bMax3);
+        cMinWorld = bMin3 - Vector3.Min(cMinWorld, bMin3);
+        cMaxWorld = -(Vector3.Max(cMaxWorld, bMax3) - bMax3);
 
         CameraControlled.transform.position += cMinWorld + cMaxWorld;
     }

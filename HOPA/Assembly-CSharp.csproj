@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\EquipmentManager.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\InputManager.cs" />
+     <Compile Include="Assets\Scripts\MovableObject.cs" />
      <Compile Include="Assets\Scripts\PickableObject.cs" />
      <Compile Include="Assets\Scripts\Room.cs" />
      <Compile Include="Assets\Scripts\Singleton.cs" />
