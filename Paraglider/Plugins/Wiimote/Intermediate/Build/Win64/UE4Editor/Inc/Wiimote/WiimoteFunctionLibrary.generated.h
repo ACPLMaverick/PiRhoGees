@@ -13,7 +13,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define WIIMOTE_WiimoteFunctionLibrary_generated_h
 
-#define WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_RPC_WRAPPERS \
+#define Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execSetRumbleEnabled) \
 	{ \
@@ -48,7 +48,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	}
 
 
-#define WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_RPC_WRAPPERS_NO_PURE_DECLS \
+#define Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execSetRumbleEnabled) \
 	{ \
@@ -83,7 +83,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	}
 
 
-#define WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_INCLASS_NO_PURE_DECLS \
+#define Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_INCLASS_NO_PURE_DECLS \
 	private: \
 	static void StaticRegisterNativesUWiimoteFunctionLibrary(); \
 	friend WIIMOTE_API class UClass* Z_Construct_UClass_UWiimoteFunctionLibrary(); \
@@ -94,7 +94,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	virtual UObject* _getUObject() const override { return const_cast<UWiimoteFunctionLibrary*>(this); }
 
 
-#define WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_INCLASS \
+#define Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_INCLASS \
 	private: \
 	static void StaticRegisterNativesUWiimoteFunctionLibrary(); \
 	friend WIIMOTE_API class UClass* Z_Construct_UClass_UWiimoteFunctionLibrary(); \
@@ -105,7 +105,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	virtual UObject* _getUObject() const override { return const_cast<UWiimoteFunctionLibrary*>(this); }
 
 
-#define WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_STANDARD_CONSTRUCTORS \
+#define Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UWiimoteFunctionLibrary(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UWiimoteFunctionLibrary) \
@@ -117,7 +117,7 @@ private: \
 public:
 
 
-#define WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_ENHANCED_CONSTRUCTORS \
+#define Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UWiimoteFunctionLibrary(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()) : Super(ObjectInitializer) { }; \
 private: \
@@ -129,29 +129,29 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UWiimoteFunctionLibrary); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UWiimoteFunctionLibrary)
 
 
-#define WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_8_PROLOG
-#define WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_GENERATED_BODY_LEGACY \
+#define Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_8_PROLOG
+#define Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_RPC_WRAPPERS \
-	WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_INCLASS \
-	WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_STANDARD_CONSTRUCTORS \
+	Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_RPC_WRAPPERS \
+	Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_INCLASS \
+	Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_GENERATED_BODY \
+#define Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_RPC_WRAPPERS_NO_PURE_DECLS \
-	WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_INCLASS_NO_PURE_DECLS \
-	WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_ENHANCED_CONSTRUCTORS \
+	Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_RPC_WRAPPERS_NO_PURE_DECLS \
+	Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_INCLASS_NO_PURE_DECLS \
+	Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h_11_ENHANCED_CONSTRUCTORS \
 static_assert(false, "Unknown access specifier for GENERATED_BODY() macro in class WiimoteFunctionLibrary."); \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID WiiTest_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h
+#define CURRENT_FILE_ID Paraglider_Plugins_Wiimote_Source_Wiimote_Public_WiimoteFunctionLibrary_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

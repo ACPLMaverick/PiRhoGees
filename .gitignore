@@ -5,3 +5,6 @@ Paraglider/Intermediate/
 *.opendb
 HOPA/obj/
 HOPA/Temp/
+Paraglider/Plugins/Wiimote/Intermediate/Build/
+Paraglider/Build/
+*.db
