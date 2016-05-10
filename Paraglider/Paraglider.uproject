@@ -17,10 +17,6 @@
 		{
 			"Name": "Substance",
 			"Enabled": true
-		},
-		{
-			"Name": "Wiimote",
-			"Enabled": false
 		}
 	],
 	"TargetPlatforms": [

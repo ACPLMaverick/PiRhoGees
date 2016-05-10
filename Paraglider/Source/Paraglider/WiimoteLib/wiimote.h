@@ -87,6 +87,9 @@ struct wiimote_state_event {
 	wiimote_state state;
 	};
 
+// moje
+class UWiimoteWrapperComponent;
+
 // wiimote class - connects and manages a wiimote and its optional extensions
 //                 (Nunchuk/Classic Controller), and exposes their state
 class wiimote : public wiimote_state
@@ -96,6 +99,9 @@ class wiimote : public wiimote_state
 		virtual ~wiimote ();
 
 	public:
+		// moje
+		UWiimoteWrapperComponent* wrapperRef = nullptr;
+
 		// these can be used to identify Connect()ed wiimote objects (if both
 		//  are unconnected they will pass the compare as their handles are invalid)
 		inline bool operator == (const wiimote& remote)

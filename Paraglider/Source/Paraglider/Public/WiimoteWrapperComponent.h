@@ -13,8 +13,6 @@
 
 #define ENABLE_DEBUG_LOGS
 #define CATEGORY "WiimoteWrapper"
-#define NATIVE_EVENT UFUNCTION(BlueprintNativeEvent, Category = CATEGORY)
-#define BLUEPRINT_CALLABLE UFUNCTION(BlueprintCallable, Category = CATEGORY)
 
 #ifdef ENABLE_DEBUG_LOGS
 
@@ -26,8 +24,10 @@
 
 #endif
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FWiimoteOneVectorEventSignature, struct FVector, VectorParam);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class PARAGLIDER_API UWiimoteWrapperComponent : public UActorComponent
+class PARAGLIDER_API UWiimoteWrapperComponent : public USceneComponent
 {
 	GENERATED_BODY()
 
@@ -37,8 +37,12 @@ private:
 
 	wiimote _remote;
 
-	inline float GetTimeSeconds();
+	FVector _prevAcceleration;
+	FVector _prevSpeed;
+	FVector _prevOrientation;
 
+	inline float GetTimeSeconds();
+	static void OnRemoteStateChanged(wiimote &remote, state_change_flags changed, const wiimote_state &newState);
 public:	
 	// Sets default values for this component's properties
 	UWiimoteWrapperComponent();
@@ -49,10 +53,20 @@ public:
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
+	// This is called immediately upon deciding to destroy the object, to allow the object to begin an asynchronous cleanup process
+	virtual void BeginDestroy() override;
+
 #pragma region Events
 
-	NATIVE_EVENT void Tilt(FVector vec);
-	BLUEPRINT_CALLABLE float ReturnChuj();
+	UPROPERTY(BlueprintAssignable, Category = "WiimoteWrapper") FWiimoteOneVectorEventSignature OnOrientationChanged;
+	UPROPERTY(BlueprintAssignable, Category = "WiimoteWrapper") FWiimoteOneVectorEventSignature OnAccelerationChanged;
+	UPROPERTY(BlueprintAssignable, Category = "WiimoteWrapper") FWiimoteOneVectorEventSignature OnSpeedChanged;
+
+#pragma endregion
+
+#pragma region Functions
+
+	UFUNCTION(BlueprintCallable, Category = "WiimoteWrapper") float ReturnChuj();
 
 #pragma endregion
 };

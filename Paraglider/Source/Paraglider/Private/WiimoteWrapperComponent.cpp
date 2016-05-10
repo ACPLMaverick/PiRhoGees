@@ -29,9 +29,21 @@ void UWiimoteWrapperComponent::BeginPlay()
 		newTime = GetTimeSeconds();
 	} while (!connected && (newTime - time <= CONNECTION_WAIT_TIME_SECONDS));
 
-	if (connected)
+	if (_remote.IsConnected())
 	{
 		DEBUG_LOG("Wiimote found!");
+
+		_remote.SetLEDs(1 | (1 << 3));
+		_remote.ChangedCallback = OnRemoteStateChanged;
+		_remote.CallbackTriggerFlags = (state_change_flags)(CONNECTED |
+			WIIMOTE_CHANGED |
+			EXTENSION_CHANGED |
+			MOTIONPLUS_CHANGED);
+		if (_remote.MotionPlusConnected())
+		{
+			_remote.EnableMotionPlus();
+		}
+		_remote.wrapperRef = this;
 	}
 	else
 	{
@@ -48,18 +60,66 @@ void UWiimoteWrapperComponent::TickComponent( float DeltaTime, ELevelTick TickTy
 	// ...
 }
 
+void UWiimoteWrapperComponent::BeginDestroy()
+{
+	if (_remote.IsConnected())
+	{
+		_remote.Disconnect();
+	}
+
+	Super::BeginDestroy();
+}
+
 inline float UWiimoteWrapperComponent::GetTimeSeconds()
 {
 	FDateTime now = FDateTime::Now();
 	return now.GetMillisecond() * 0.001f + now.GetSecond() + now.GetMinute() * 60.0f + now.GetHour() * 3600.0f;
 }
 
-NATIVE_EVENT void UWiimoteWrapperComponent::Tilt(FVector vec)
+void UWiimoteWrapperComponent::OnRemoteStateChanged(wiimote & remote, state_change_flags changed, const wiimote_state & newState)
 {
-	return NATIVE_EVENT void();
+	FVector orientationVector, accelerationVector, speedVector;
+
+	orientationVector.X = remote.Acceleration.Orientation.Pitch;
+	orientationVector.Y = 0.0f;
+	orientationVector.Z = remote.Acceleration.Orientation.Roll;
+
+	accelerationVector.X = remote.Acceleration.X;
+	accelerationVector.Y = remote.Acceleration.Y;
+	accelerationVector.Z = remote.Acceleration.Z;
+
+	speedVector.X = remote.MotionPlus.Speed.Pitch;
+	speedVector.Y = remote.MotionPlus.Speed.Yaw;
+	speedVector.Z = remote.MotionPlus.Speed.Roll;
+
+	if (remote.wrapperRef != nullptr)
+	{
+		if (!orientationVector.Equals(remote.wrapperRef->_prevOrientation))
+		{
+			remote.wrapperRef->_prevOrientation = orientationVector;
+			remote.wrapperRef->OnOrientationChanged.Broadcast(orientationVector);
+		}
+
+		if (!accelerationVector.Equals(remote.wrapperRef->_prevAcceleration))
+		{
+			remote.wrapperRef->_prevAcceleration = accelerationVector;
+			remote.wrapperRef->OnAccelerationChanged.Broadcast(accelerationVector);
+		}
+
+		if (!speedVector.Equals(remote.wrapperRef->_prevSpeed))
+		{
+			remote.wrapperRef->_prevSpeed = speedVector;
+			remote.wrapperRef->OnSpeedChanged.Broadcast(speedVector);
+		}
+	}
 }
 
-BLUEPRINT_CALLABLE float UWiimoteWrapperComponent::ReturnChuj()
+//void UWiimoteWrapperComponent::Tilt(FVector vec)
+//{
+//	return;
+//}
+
+float UWiimoteWrapperComponent::ReturnChuj()
 {
 	return 3.14f;
 }
