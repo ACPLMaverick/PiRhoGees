@@ -8,3 +8,5 @@ HOPA/Temp/
 Paraglider/Plugins/Wiimote/Intermediate/Build/
 Paraglider/Build/
 *.db
+Paraglider/BuildGame/
+*.exp
