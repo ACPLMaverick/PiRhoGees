@@ -35,7 +35,7 @@ class PARAGLIDER_API UWiimoteWrapperComponent : public USceneComponent
 
 private:
 
-	const float CONNECTION_WAIT_TIME_SECONDS = 5.0f;
+	const float CONNECTION_WAIT_TIME_SECONDS = 1.0f;
 
 	wiimote _remote;
 	wiimote_state _prevState;
